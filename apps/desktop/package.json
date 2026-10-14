@@ -1,0 +1,5 @@
+{
+  "name": "@opentalk/desktop", "version": "0.2.0", "private": true,
+  "description": "OpenTalk local Windows dictation with ChatGPT plan cleanup", "author": "OpenTalk owner",
+  "main": "dist/main.cjs"
+}

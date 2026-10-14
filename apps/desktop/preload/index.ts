@@ -1,0 +1,46 @@
+import { contextBridge, ipcRenderer } from 'electron';
+import type { AssistantChoice, DesktopBridge, HistoryPage, HistoryQuery, MeetingPage, MeetingRecord, OverviewSummary, Snapshot, Settings, WeeklyTasks } from '../../../packages/core/src/contracts';
+const bridge: DesktopBridge = {
+  recordingVisible: () => ipcRenderer.invoke('recording-visible') as Promise<void>,
+  getSnapshot: () => ipcRenderer.invoke('snapshot') as Promise<Snapshot>,
+  updateSettings: (settings: Settings) => ipcRenderer.invoke('settings', settings) as Promise<Snapshot>,
+  signIn: (id: string | null) => ipcRenderer.invoke('sign-in', id) as Promise<Snapshot>,
+  testCleanup: () => ipcRenderer.invoke('test-cleanup') as Promise<Snapshot>,
+  cancelSignIn: () => ipcRenderer.invoke('cancel-sign-in') as Promise<Snapshot>,
+  selectAccount: (id: string) => ipcRenderer.invoke('select-account', id) as Promise<Snapshot>,
+  disconnect: (id: string) => ipcRenderer.invoke('disconnect', id) as Promise<Snapshot>,
+  manageUsage: () => ipcRenderer.invoke('manage-usage') as Promise<void>,
+  refreshDevices: () => ipcRenderer.invoke('devices') as Promise<Snapshot>,
+  testMicrophone: () => ipcRenderer.invoke('test-microphone') as Promise<void>,
+  downloadModel: () => ipcRenderer.invoke('download-model') as Promise<Snapshot>,
+  cancelDownload: () => ipcRenderer.invoke('cancel-download') as Promise<void>,
+  setEnabled: (value: boolean) => ipcRenderer.invoke('enabled', value) as Promise<Snapshot>,
+  cancelSession: () => ipcRenderer.invoke('cancel-session') as Promise<void>,
+  copyRecovery: () => ipcRenderer.invoke('copy-recovery') as Promise<boolean>,
+  setOverlayPointerInput: (enabled: boolean) => ipcRenderer.invoke('overlay-pointer-input', enabled) as Promise<void>,
+  setCommandMode: (enabled: boolean) => ipcRenderer.invoke('command-mode', enabled) as Promise<void>,
+  startAssistant: () => ipcRenderer.invoke('assistant-start') as Promise<void>,
+  stopAssistant: () => ipcRenderer.invoke('assistant-stop') as Promise<void>,
+  acceptAssistant: (choice: AssistantChoice) => ipcRenderer.invoke('assistant-accept', choice) as Promise<void>,
+  getAssistantResult: () => ipcRenderer.invoke('assistant-result') as Promise<string>,
+  copyAssistant: () => ipcRenderer.invoke('assistant-copy') as Promise<boolean>,
+  getOverview: () => ipcRenderer.invoke('overview') as Promise<OverviewSummary>,
+  getWeeklyTasks: () => ipcRenderer.invoke('weekly-tasks') as Promise<WeeklyTasks>,
+  queryHistory: (query: HistoryQuery) => ipcRenderer.invoke('history-query', query) as Promise<HistoryPage>,
+  copyHistory: (id: string) => ipcRenderer.invoke('history-copy', id) as Promise<boolean>,
+  deleteHistory: (id: string) => ipcRenderer.invoke('history-delete', id) as Promise<boolean>,
+  startMeeting: () => ipcRenderer.invoke('meeting-start') as Promise<void>,
+  pauseMeeting: () => ipcRenderer.invoke('meeting-pause') as Promise<void>,
+  resumeMeeting: () => ipcRenderer.invoke('meeting-resume') as Promise<void>,
+  bookmarkMeeting: () => ipcRenderer.invoke('meeting-bookmark') as Promise<void>,
+  stopMeeting: () => ipcRenderer.invoke('meeting-stop') as Promise<void>,
+  queryMeetings: (query: HistoryQuery) => ipcRenderer.invoke('meeting-query', query) as Promise<MeetingPage>,
+  getMeeting: (id: string) => ipcRenderer.invoke('meeting-get', id) as Promise<MeetingRecord | null>,
+  deleteMeeting: (id: string) => ipcRenderer.invoke('meeting-delete', id) as Promise<boolean>,
+  exportMeetingMinutes: (id: string) => ipcRenderer.invoke('meeting-export', id) as Promise<boolean>,
+  onStatus: listener => {
+    const handler = (_event: Electron.IpcRendererEvent, snapshot: Snapshot) => listener(snapshot);
+    ipcRenderer.on('status', handler); return () => ipcRenderer.removeListener('status', handler);
+  },
+};
+contextBridge.exposeInMainWorld('openTalk', bridge);

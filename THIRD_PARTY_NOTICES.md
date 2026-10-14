@@ -1,0 +1,15 @@
+# Third-party notices
+
+OpenTalk source is licensed under GNU GPL-3.0. This repository remains a working preview; no unsigned local installer should be presented as a supported release.
+
+The implementation uses the documented direct OAuth flow. No Sign in with ChatGPT DevKit source or branded assets have been copied. Its Noncommercial License v1.0 was reviewed; app-owned cancellation, refresh generations, bounded streams and encrypted persistence are implemented independently.
+
+Production dependencies include React/React DOM (MIT), react-markdown and its unified/remark ecosystem dependencies (MIT), Zod (MIT), jose (MIT), Electron (MIT plus bundled Chromium/Node notices), the Manrope variable typeface distributed through `@fontsource-variable/manrope` 5.3.0 (SIL Open Font License 1.1), CPAL (Apache-2.0), serde/serde_json (MIT or Apache-2.0), uuid (MIT or Apache-2.0), windows/windows-sys (MIT or Apache-2.0), and whisper.cpp (MIT).
+
+whisper.cpp v1.9.4 source is pinned to commit `927cfce34f31707e17f2bff35c349632fb9e2c3a`, with OpenTalk's reviewed `native/worker/whisper-abort.patch` forwarding cancellation callbacks into scheduled CPU graphs. The reproducible build verifies/applies that local source modification; model weights, recognition context and decoding quality settings are unchanged. Its MIT license is copied beside the bundled worker. Speech model weights originate from OpenAI Whisper (MIT), converted by the whisper.cpp project. The SHA-256 model manifest pins Hugging Face repository revision `5359861c739e955e79d9a303bcbc70fb988958b1`.
+
+Before distributing binaries, include the complete dependency license inventory and Electron's third-party license bundle, verify all transitive Rust licenses from `Cargo.lock`, and complete the distribution-hardening tasks in `TASKS.md`. This notice is an inventory, not a replacement for required license texts.
+
+Moonshine Voice 0.1.5's official Windows x64 wheel is SHA-256 pinned (`7fc9a84e827360ddb85c2735f44a1502c5575c27dcb476a2555646cd20a70e9d`). Only its native Moonshine/ONNX Runtime DLLs are redistributed, not its Python runtime or bindings. The C API header is pinned to Moonshine commit `234f60faa0eb388b01cdf7e60aca232af37aefda`; the build mechanically changes its export annotation to an import annotation for the consumer. No inference implementation is modified. Moonshine's MIT license and ONNX Runtime 1.23.2's MIT license and complete upstream ThirdPartyNotices are bundled alongside the worker. The English Small Streaming model is the official `quantized_26_08_21` release; every asset is pinned by size and SHA-256 in `native/moonshine/manifest.json`. English streaming weights are MIT-licensed. No Community-licensed multilingual model, speaker-identification, spelling or TTS model is included. Official signed MSVC x64 app-local redistributables supplied by the installed Visual Studio build tools accompany these DLLs under Microsoft's redistributable terms; the end user does not need the developer toolchain.
+
+OpenAI and ChatGPT marks belong to their respective owners. This independent application does not claim endorsement.
